@@ -1,36 +1,49 @@
-"use client";
+'use client';
 
-import ConnectButton from "@/components/ConnectButton";
-import { useWeb3Modal } from "@web3modal/wagmi/react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import ChatInterface from '../components/chat/chat-interface';
+import WalletConnect from '../components/wallet/transaction-monitor';
+import TransactionMonitor from '../components/wallet/wallet-connect';
+import { useAccount } from 'wagmi';
 
 export default function Home() {
-  const { address, isConnected } = useAccount();
-  // const { open } = useWeb3Modal();
-  const { disconnect } = useDisconnect();
+  const { isConnected } = useAccount();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-[#070E1B]">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
-        <h1 className="text-2xl font-bold text-white mb-8">
-          BlockDAG Starter Kit
-        </h1>
-        <div className="bg-gray-800 rounded-lg p-6">
-          {isConnected ? (
-            <>
-              <p className="text-white">Connected to {address}</p>
-              <button
-                onClick={() => disconnect()}
-                className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-              >
-                Disconnect
-              </button>
-            </>
-          ) : (
-            <ConnectButton />
-          )}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-xl">🛡️</span>
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white">GuardianBot</h1>
+              <p className="text-gray-300">AI-Powered Blockchain Security</p>
+            </div>
+          </div>
+          <WalletConnect />
+        </div>
+
+        {/* Main Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Chat Interface */}
+          <div className="lg:col-span-2">
+            <ChatInterface />
+          </div>
+
+          {/* Transaction Monitor */}
+          <div className="lg:col-span-1">
+            {isConnected ? (
+              <TransactionMonitor />
+            ) : (
+              <div className="bg-slate-800 rounded-lg p-6 text-center">
+                <p className="text-gray-400">Connect your wallet to monitor transactions</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
